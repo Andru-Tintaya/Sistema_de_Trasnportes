@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- TARJETAS DE ESTADÍSTICAS -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ ventas_hoy }}</div>
+        <div class="stat-label">Ventas Hoy</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ pasajeros }}</div>
+        <div class="stat-label">Pasajeros</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ buses }}</div>
+        <div class="stat-label">Buses</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ viajes }}</div>
+        <div class="stat-label">Viajes</div>
+    </div>
+</div>
+
+<!-- INFORMACIÓN -->
+<div class="card">
+    <div class="card-header">SISTEMA DE TRANSPORTE PASAJES</div>
+    <div class="card-body">
+        <p>Bienvenido al sistema de gestión de venta y facturación de pasajes.</p>
+        <p style="margin-top: 10px; color: var(--gris-500);">Versión 1.0 - Proyecto Final</p>
+    </div>
+</div>
+{% endblock %}

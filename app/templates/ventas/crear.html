@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">NUEVA VENTA DE PASAJE</h1>
+<p class="page-subtitle">Complete los datos para registrar una venta</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <!-- Formulario -->
+    <div class="card">
+        <div class="card-header">DATOS DEL PASAJERO</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('ventas.crear') }}" id="formVenta">
+                <div class="form-group">
+                    <label>SELECCIONAR VIAJE</label>
+                    <select name="id_viaje" id="id_viaje" class="form-control" required onchange="cargarAsientos()">
+                        <option value="">-- Seleccionar Viaje --</option>
+                        {% for v in viajes %}
+                        <option value="{{ v.id_viaje }}">{{ v.origen }} → {{ v.destino }} | {{ v.fecha_viaje }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>CÉDULA DE IDENTIDAD (CI)</label>
+                    <input type="text" name="ci_pasajero" id="ci_pasajero" class="form-control" required onblur="buscarPasajero()">
+                </div>
+                
+                <div class="form-group">
+                    <label>NOMBRES</label>
+                    <input type="text" name="nombres" id="nombres" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>APELLIDOS</label>
+                    <input type="text" name="apellidos" id="apellidos" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ASIENTO SELECCIONADO</label>
+                    <input type="text" name="id_asiento" id="id_asiento" class="form-control" readonly placeholder="Haga clic en un asiento verde" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>PRECIO (Bs)</label>
+                    <input type="number" name="monto" id="monto" class="form-control" value="50" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">CONFIRMAR VENTA</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Mapa de Asientos -->
+    <div class="card">
+        <div class="card-header">SELECCIONE SU ASIENTO</div>
+        <div class="card-body">
+            <div class="asientos-container">
+                <div id="grid-asientos" class="asientos-grid">
+                    <p style="grid-column: span 6; text-align: center; color: var(--gris-400);">
+                        Seleccione un viaje primero...
+                    </p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 20px; height: 20px; background: var(--verde); border-radius: 4px;"></div>
+                    <span style="font-size: 13px;">Libre</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 20px; height: 20px; background: var(--gris-300); border-radius: 4px;"></div>
+                    <span style="font-size: 13px;">Ocupado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function cargarAsientos() {
+    var id_viaje = document.getElementById('id_viaje').value;
+    if (!id_viaje) return;
+    
+    fetch('/ventas/asientos/' + id_viaje)
+    .then(response => response.json())
+    .then(data => {
+        var grid = document.getElementById('grid-asientos');
+        grid.innerHTML = '';
+        
+        if (data.length === 0) {
+            grid.innerHTML = '<p style="grid-column: span 6; text-align: center; color: var(--gris-400);">No hay asientos disponibles</p>';
+            return;
+        }
+        
+        data.forEach(function(a) {
+            var div = document.createElement('div');
+            div.className = 'asiento';
+            div.innerText = a.numero;
+            
+            if (a.estado === 'libre') {
+                div.classList.add('asiento-libre');
+                div.onclick = function() {
+                    document.querySelectorAll('.asiento').forEach(function(el) {
+                        el.classList.remove('asiento-seleccionado');
+                        el.classList.add('asiento-libre');
+                    });
+                    div.classList.remove('asiento-libre');
+                    div.classList.add('asiento-seleccionado');
+                    document.getElementById('id_asiento').value = a.id_asiento;
+                };
+            } else {
+                div.classList.add('asiento-ocupado');
+            }
+            
+            grid.appendChild(div);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function buscarPasajero() {
+    var ci = document.getElementById('ci_pasajero').value;
+    if (!ci) return;
+    
+    fetch('/pasajeros/buscar', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ci: ci})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.existe) {
+            document.getElementById('nombres').value = data.nombres;
+            document.getElementById('apellidos').value = data.apellidos;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+{% endblock %}

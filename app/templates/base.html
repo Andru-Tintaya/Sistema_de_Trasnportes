@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Transporte - Pasajes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% if session.get('usuario') %}
+    <!-- SIDEBAR MODERNO -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <h2>TRANSPORTE</h2>
+            <span>Pasajes Bolivia</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="{{ url_for('dashboard.index') }}" class="sidebar-link">Panel de Control</a>
+            <a href="{{ url_for('buses.listar') }}" class="sidebar-link">Gestión de Buses</a>
+            <a href="{{ url_for('choferes.listar') }}" class="sidebar-link">Gestión de Choferes</a>
+            <a href="{{ url_for('viajes.listar') }}" class="sidebar-link">Gestión de Viajes</a>
+            <a href="{{ url_for('ventas.crear') }}" class="sidebar-link">Nueva Venta</a>
+            <a href="{{ url_for('auth.logout') }}" class="sidebar-link">Cerrar Sesión</a>
+        </div>
+    </nav>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <h1 class="page-title">{% block title %}Sistema de Transporte{% endblock %}</h1>
+        <p class="page-subtitle">Gestione sus operaciones aquí</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% else %}
+    <!-- LOGIN CENTRADO (SIN SIDEBAR) -->
+    <div class="login-page">
+        {% block login_content %}
+        <div class="login-card">
+            <div class="login-header">
+                <h1>TRANSPORTE PASAJES</h1>
+                <p>Sistema de Venta y Facturación</p>
+            </div>
+            <div class="login-body">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <div class="form-group">
+                        <label>USUARIO</label>
+                        <input type="text" name="usuario" class="form-control" placeholder="Ingrese su usuario" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CONTRASEÑA</label>
+                        <input type="password" name="password" class="form-control" placeholder="Ingrese su contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">INGRESAR AL SISTEMA</button>
+                </form>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+    {% endif %}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

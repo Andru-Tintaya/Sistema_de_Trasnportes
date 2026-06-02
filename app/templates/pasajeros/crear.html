@@ -1,0 +1,29 @@
+cat > templates/pasajeros/crear.html << 'EOF'
+{% extends "base.html" %}
+
+{% block content %}
+<h1>REGISTRAR PASAJERO</h1>
+<br>
+<div class="card">
+    <form method="POST" action="{{ url_for('pasajeros.crear') }}">
+        <div class="form-group">
+            <label>CÉDULA DE IDENTIDAD (CI)</label>
+            <input type="text" name="ci" required>
+        </div>
+        <div class="form-group">
+            <label>NOMBRES</label>
+            <input type="text" name="nombres" required>
+        </div>
+        <div class="form-group">
+            <label>APELLIDOS</label>
+            <input type="text" name="apellidos" required>
+        </div>
+        <div class="form-group">
+            <label>TELÉFONO (Opcional)</label>
+            <input type="text" name="telefono">
+        </div>
+        <button type="submit" class="btn">REGISTRAR PASAJERO</button>
+    </form>
+</div>
+{% endblock %}
+EOF

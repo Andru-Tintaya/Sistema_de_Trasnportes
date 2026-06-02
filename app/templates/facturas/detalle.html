@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura {{ factura.nro_factura }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Library for PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="factura" id="factura-content">
+        <div class="factura-header">
+            <h2>🚌 TRANSPORTE PASAJES BOLIVIA</h2>
+            <p>NIT: 123456789</p>
+        </div>
+        
+        <div class="factura-body">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p style="font-size: 14px; color: var(--gris-500);">FACTURA FISCAL</p>
+                <h3 style="font-size: 28px; font-weight: 800; color: var(--azul-principal);">{{ factura.nro_factura }}</h3>
+                <p style="font-size: 14px;">Fecha: {{ factura.fecha_emision.strftime('%d/%m/%Y %H:%M') }}</p>
+            </div>
+            
+            <table class="table">
+                <tr>
+                    <th colspan="2">DATOS DEL PASAJERO</th>
+                </tr>
+                <tr>
+                    <td><strong>Nombre</strong></td>
+                    <td>{{ venta.pasajero.nombres }} {{ venta.pasajero.apellidos }}</td>
+                </tr>
+                <tr>
+                    <td><strong>CI</strong></td>
+                    <td>{{ venta.pasajero.ci }}</td>
+                </tr>
+            </table>
+            
+            <table class="table" style="margin-top: 20px;">
+                <tr>
+                    <th colspan="2">DATOS DEL VIAJE</th>
+                </tr>
+                <tr>
+                    <td><strong>Origen</strong></td>
+                    <td>{{ venta.viaje.origen }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Destino</strong></td>
+                    <td>{{ venta.viaje.destino }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Fecha</strong></td>
+                    <td>{{ venta.viaje.fecha_viaje }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Hora</strong></td>
+                    <td>{{ venta.viaje.hora_salida }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Bus</strong></td>
+                    <td>{{ venta.viaje.id_bus }} - {{ venta.asiento.numero }}</td>
+                </tr>
+            </table>
+            
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: var(--gris-50); border-radius: 10px;">
+                <p style="font-size: 14px; color: var(--gris-500);">TOTAL A PAGAR</p>
+                <p style="font-size: 36px; font-weight: 800; color: var(--azul-principal);">Bs. {{ factura.total }}</p>
+            </div>
+        </div>
+        
+        <div class="factura-footer">
+            <p>Gracias por su preferencia</p>
+            <p style="font-size: 12px;">Sistema de Transporte Pasajes Bolivia</p>
+        </div>
+    </div>
+    
+    <!-- Botón Flotante para generar PDF -->
+    <button onclick="generarPDF()" class="btn-pdf" title="Descargar PDF">📄</button>
+    
+    <script>
+    function generarPDF() {
+        var element = document.getElementById('factura-content');
+        var opt = {
+            margin: 10,
+            filename: '{{ factura.nro_factura }}.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+    </script>
+</body>
+</html>

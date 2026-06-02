@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">REGISTRAR NUEVO CHOFER</h1>
+<p class="page-subtitle">Ingrese los datos del chofer</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('choferes.crear') }}">
+            <div class="form-group">
+                <label>CÉDULA DE IDENTIDAD (CI)</label>
+                <input type="text" name="ci" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>NOMBRES</label>
+                <input type="text" name="nombres" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>APELLIDOS</label>
+                <input type="text" name="apellidos" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>NÚMERO DE LICENCIA</label>
+                <input type="text" name="licencia" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>TELÉFONO (Opcional)</label>
+                <input type="text" name="telefono" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">GUARDAR CHOFER</button>
+            <a href="{{ url_for('choferes.listar') }}" class="btn btn-outline" style="margin-left: 10px;">CANCELAR</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">GESTIÓN DE CHOFERES</h1>
+<p class="page-subtitle">Administre los choferes registrados</p>
+
+<a href="{{ url_for('choferes.crear') }}" class="btn btn-primary" style="width: auto; margin-bottom: 20px;">+ AGREGAR NUEVO CHOFER</a>
+
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CI</th>
+                <th>NOMBRES</th>
+                <th>APELLIDOS</th>
+                <th>LICENCIA</th>
+                <th>TELÉFONO</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ch in choferes %}
+            <tr>
+                <td>{{ ch.id_chofer }}</td>
+                <td>{{ ch.ci }}</td>
+                <td>{{ ch.nombres }}</td>
+                <td>{{ ch.apellidos }}</td>
+                <td>{{ ch.licencia }}</td>
+                <td>{{ ch.telefono or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

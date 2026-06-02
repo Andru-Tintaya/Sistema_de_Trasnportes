@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">PROGRAMAR NUEVO VIAJE</h1>
+<p class="page-subtitle">Ingrese los datos del viaje</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('viajes.crear') }}">
+            <div class="form-group">
+                <label>ORIGEN</label>
+                <input type="text" name="origen" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>DESTINO</label>
+                <input type="text" name="destino" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>FECHA DEL VIAJE</label>
+                <input type="date" name="fecha_viaje" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>HORA DE SALIDA</label>
+                <input type="time" name="hora_salida" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>SELECCIONE BUS</label>
+                <select name="id_bus" class="form-control" required>
+                    <option value="">-- Seleccionar Bus --</option>
+                    {% for bus in buses %}
+                    <option value="{{ bus.id_bus }}">{{ bus.placa }} - {{ bus.modelo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>SELECCIONE CHOFER</label>
+                <select name="id_chofer" class="form-control" required>
+                    <option value="">-- Seleccionar Chofer --</option>
+                    {% for ch in choferes %}
+                    <option value="{{ ch.id_chofer }}">{{ ch.nombres }} {{ ch.apellidos }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">PROGRAMAR VIAJE</button>
+            <a href="{{ url_for('viajes.listar') }}" class="btn btn-outline" style="margin-left: 10px;">CANCELAR</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

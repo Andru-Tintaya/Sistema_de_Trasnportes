@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">REGISTRAR NUEVO BUS</h1>
+<p class="page-subtitle">Ingrese los datos del bus</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('buses.crear') }}">
+            <div class="form-group">
+                <label>PLACA</label>
+                <input type="text" name="placa" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>MODELO</label>
+                <input type="text" name="modelo" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>CAPACIDAD (NÚMERO DE ASIENTOS)</label>
+                <input type="number" name="capacidad" class="form-control" required min="1" max="60">
+            </div>
+            <button type="submit" class="btn btn-primary">GUARDAR BUS</button>
+            <a href="{{ url_for('buses.listar') }}" class="btn btn-outline" style="margin-left: 10px;">CANCELAR</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

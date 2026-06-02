@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="page-title">GESTIÓN DE VIAJES</h1>
+<p class="page-subtitle">Administre los viajes programados</p>
+
+<a href="{{ url_for('viajes.crear') }}" class="btn btn-primary" style="width: auto; margin-bottom: 20px;">+ PROGRAMAR NUEVO VIAJE</a>
+
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ORIGEN</th>
+                <th>DESTINO</th>
+                <th>FECHA</th>
+                <th>HORA</th>
+                <th>BUS</th>
+                <th>CHOFER</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in viajes %}
+            <tr>
+                <td>{{ v.id_viaje }}</td>
+                <td>{{ v.origen }}</td>
+                <td>{{ v.destino }}</td>
+                <td>{{ v.fecha_viaje }}</td>
+                <td>{{ v.hora_salida }}</td>
+                <td>{{ v.id_bus }}</td>
+                <td>{{ v.id_chofer }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
