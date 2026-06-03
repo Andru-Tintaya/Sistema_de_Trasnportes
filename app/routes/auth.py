@@ -15,17 +15,18 @@ def login():
         usuario = request.form['usuario']
         password = request.form['password']
         
-        # Verificar si es el usuario admin (credenciales fixed)
-        admin_usuario = current_app.config.get('ADMIN_USUARIO', 'admin')
-        admin_password = current_app.config.get('ADMIN_PASSWORD', 'admin123')
+        # Obtener credenciales de config
+        admin_usuario = current_app.config.get('ADMIN_USUARIO')
+        admin_password = current_app.config.get('ADMIN_PASSWORD')
         
+        # PRIMERO verificar contra variables de entorno (más seguro)
         if usuario == admin_usuario and password == admin_password:
             session['id_usuario'] = 0
             session['usuario'] = 'admin'
             session.permanent = True
             return redirect(url_for('dashboard.index'))
         
-        # Verificar en la base de datos
+        # LUEGO verificar en la base de datos
         user = Usuario.query.filter_by(usuario=usuario).first()
         if user and check_password_hash(user.password, password):
             session['id_usuario'] = user.id_usuario

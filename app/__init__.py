@@ -5,7 +5,6 @@ from config import config
 import os
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
 load_dotenv()
 
 db = SQLAlchemy()
@@ -17,13 +16,13 @@ def create_app(config_name='default'):
     
     # Agregar credenciales de admin desde variables de entorno
     app.config['ADMIN_USUARIO'] = os.environ.get('ADMIN_USUARIO', 'admin')
-    app.config['ADMIN_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', 'admin123')
+    app.config['ADMIN_PASSWORD'] = os.environ.get('ADMIN_PASSWORD', 'admin456')
     
     db.init_app(app)
     migrate.init_app(app, db)
     
     # Registro de Blueprints
-    from app.routes import auth, dashboard, buses, choferes, viajes, pasajeros, ventas, facturas
+    from app.routes import auth, dashboard, buses, choferes, viajes,pasajeros, ventas, facturas
     
     app.register_blueprint(auth.bp)
     app.register_blueprint(dashboard.bp)
