@@ -3,10 +3,8 @@ from werkzeug.security import check_password_hash
 from app.models.usuario import Usuario
 from app import db
 
-# Sin prefijo para que "/" funcione
 bp = Blueprint('auth', __name__)
 
-# RUTA RAÍZ - Redirigir al login
 @bp.route('/')
 def index():
     return redirect(url_for('auth.login'))

@@ -22,7 +22,6 @@ def crear():
             ci_pasajero = request.form['ci_pasajero']
             monto = float(request.form['monto'])
             
-            # Verificar que el asiento esté libre
             asiento_viaje = ViajeAsiento.query.filter_by(
                 id_viaje=id_viaje, 
                 id_asiento=id_asiento
@@ -32,7 +31,6 @@ def crear():
                 flash('El asiento ya está ocupado. Seleccione otro.', 'error')
                 return render_template('ventas/crear.html', viajes=viajes)
             
-            # Buscar o crear pasajero
             pasajero = Pasajero.query.filter_by(ci=ci_pasajero).first()
             if not pasajero:
                 pasajero = Pasajero(
@@ -43,10 +41,8 @@ def crear():
                 db.session.add(pasajero)
                 db.session.flush()
             
-            # Marcar asiento como ocupado
             asiento_viaje.estado = 'ocupado'
             
-            # Crear venta
             nueva_venta = Venta(
                 monto=monto,
                 id_pasajero=pasajero.id_pasajero,
@@ -57,7 +53,6 @@ def crear():
             db.session.add(nueva_venta)
             db.session.flush()
             
-            # Crear factura automáticamente
             nro_factura = f"FAC-{datetime.now().strftime('%Y%m%d')}-{random.randint(1000, 9999)}"
             factura = Factura(
                 nro_factura=nro_factura,
@@ -78,7 +73,6 @@ def crear():
 
 @bp.route('/asientos/<int:id_viaje>')
 def get_asientos(id_viaje):
-    # Devuelve JSON con estados de asientos para el grid
     datos = db.session.query(ViajeAsiento, Asiento).join(
         Asiento, 
         ViajeAsiento.id_asiento == Asiento.id_asiento

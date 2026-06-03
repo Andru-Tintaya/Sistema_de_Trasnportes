@@ -12,7 +12,6 @@ bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 def index():
     hoy = datetime.now().date()
     
-    # Contar ventas de hoy
     total_ventas_hoy = db.session.query(Venta).filter(
         db.func.date(Venta.fecha_venta) == hoy
     ).count()

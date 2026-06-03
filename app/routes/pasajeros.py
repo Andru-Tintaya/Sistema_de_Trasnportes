@@ -18,6 +18,5 @@ def crear():
             request.form['ci'], request.form['nombres'],
             request.form['apellidos'], request.form.get('telefono')
         )
-        # Redirección simple o vía AJAX en ventas
         return "ok" 
     return render_template('pasajeros/crear.html')
